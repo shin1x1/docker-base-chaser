@@ -59,13 +59,19 @@ func (r *RootHandler) fetchLoop(provider provider.Provider, target *Target) erro
 			return err
 		}
 
+		prefix := "execute"
 		if r.dryRun {
-			fmt.Printf("\nexecution: Tag=%s\n%s", tag.Tag, cmdText)
-		} else {
-			cmd := exec.Command("sh", "-c", cmdText)
-			if err := cmd.Run(); err != nil {
-				return err
-			}
+			prefix = "dry-run"
+		}
+		fmt.Printf("\n[%s]: Tag=%s\n%s", prefix, tag.Tag, cmdText)
+
+		if r.dryRun {
+			return nil
+		}
+
+		cmd := exec.Command("sh", "-c", cmdText)
+		if err := cmd.Run(); err != nil {
+			return err
 		}
 	}
 
