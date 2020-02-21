@@ -45,9 +45,10 @@ func (r *RootHandler) fetchLoop(provider provider.Provider, target *Target) erro
 	}
 
 	for _, tag := range target.Tags {
-		if !tag.IsFetched() {
+		if !tag.CanExecute() {
 			continue
 		}
+
 		// テンプレート置換
 		if err := template.ExecFile(target.Template.Source, target.Template.Destination, tag.Tag); err != nil {
 			return err
@@ -73,6 +74,8 @@ func (r *RootHandler) fetchLoop(provider provider.Provider, target *Target) erro
 		if err := cmd.Run(); err != nil {
 			return err
 		}
+
+		tag.Executed()
 	}
 
 	return nil
@@ -80,14 +83,21 @@ func (r *RootHandler) fetchLoop(provider provider.Provider, target *Target) erro
 
 func (r *RootHandler) updateTags(images []*provider.Image, target *Target) error {
 	for _, tag := range target.Tags {
+		if !tag.CanMatch() {
+			continue;
+		}
+
 		for _, img := range images {
 			// pattern にマッチすること
 			if !tag.MatchPattern(img.Tag) {
 				continue
 			}
 
+			tag.Matched()
+
 			// 更新日付
-			if !tag.Before(img) {
+			if !tag.ShouldUpdate(img) {
+				tag.NotExecuted()
 				continue
 			}
 

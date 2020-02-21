@@ -22,7 +22,7 @@ type Targets []*Target
 func (t *Targets) AreUpdated() bool {
 	for _, target := range *t {
 		for _, tag := range target.Tags {
-			if tag.IsUpdated() {
+			if tag.IsExecuted() {
 				return true
 			}
 		}
@@ -41,7 +41,7 @@ type Target struct {
 
 func (t *Target) Done() bool {
 	for _, tag := range t.Tags {
-		if !tag.IsFetched() {
+		if tag.IsNotMatched() {
 			return false
 		}
 	}
@@ -59,12 +59,21 @@ type TargetTag struct {
 	Pattern     string
 	Version     string
 	LastUpdated *time.Time
-	Fetched     *time.Time
-	Updated     bool
+	mode        TargetTagMode
 
 	re   *regexp.Regexp
 	cons *semver.Constraints
 }
+
+type TargetTagMode int
+
+const (
+	notMatched TargetTagMode = iota
+	matched
+	updated
+	executed
+	notExecuted
+)
 
 func NewTargetTag(pattern, version, resolved string, lastUpdated *time.Time) *TargetTag {
 	t := TargetTag{
@@ -72,7 +81,7 @@ func NewTargetTag(pattern, version, resolved string, lastUpdated *time.Time) *Ta
 		Pattern:     pattern,
 		Version:     version,
 		LastUpdated: lastUpdated,
-		Updated:     false,
+		mode:        notMatched,
 	}
 	t.re = regexp.MustCompile(t.Pattern)
 
@@ -92,24 +101,43 @@ func (t *TargetTag) CheckVersion(v *semver.Version) bool {
 	return t.cons.Check(v)
 }
 
-func (t *TargetTag) Before(image *provider.Image) bool {
+func (t *TargetTag) CanMatch() bool {
+	return t.mode == notMatched
+}
+
+func (t *TargetTag) CanExecute() bool {
+	return t.mode == updated
+}
+
+func (t *TargetTag) ShouldUpdate(image *provider.Image) bool {
 	if t.LastUpdated == nil {
 		return true
 	}
 	return image.LastUpdated.After(*t.LastUpdated)
 }
 
+func (t *TargetTag) Matched() {
+	t.mode = matched
+}
+
+func (t *TargetTag) NotExecuted() {
+	t.mode = notExecuted
+}
+
+func (t *TargetTag) Executed() {
+	t.mode = executed
+}
+
 func (t *TargetTag) Update(image *provider.Image) {
 	t.Tag = image.Tag
 	t.LastUpdated = &image.LastUpdated
-	t.Fetched = &image.LastUpdated
-	t.Updated = true
+	t.mode = updated
 }
 
-func (t *TargetTag) IsFetched() bool {
-	return t.Fetched != nil
+func (t *TargetTag) IsNotMatched() bool {
+	return t.mode == notMatched
 }
 
-func (t *TargetTag) IsUpdated() bool {
-	return t.Updated
+func (t *TargetTag) IsExecuted() bool {
+	return t.mode == executed
 }

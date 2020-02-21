@@ -1,3 +1,9 @@
 .PHONY: test
 test:
-	go test ./...
+	go test -v ./...
+
+.PHONY: vet
+vet:
+	go vet ./...
+
+

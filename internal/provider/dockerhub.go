@@ -24,13 +24,13 @@ type result struct {
 type DockerHub struct {
 	name   string
 	next   string
-	logger log.Logger
+	logger *log.Logger
 }
 
 func NewDockerHub(name string) *DockerHub {
 	logger := log.Logger{}
 	logger.SetOutput(os.Stdout)
-	return &DockerHub{name: name, next: "", logger: logger}
+	return &DockerHub{name: name, next: "", logger: &logger}
 }
 
 const apiUrl = "https://registry.hub.docker.com/v2/repositories/%s/tags/?page_size=100"

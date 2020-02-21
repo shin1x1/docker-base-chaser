@@ -14,13 +14,13 @@ func TestTargets_IsUpdated(t *testing.T) {
 				&Target{
 					Tags: []*TargetTag{
 						{
-							Updated: false,
+							mode: executed,
 						},
 						{
-							Updated: true,
+							mode: notExecuted,
 						},
 						{
-							Updated: false,
+							mode: notMatched,
 						},
 					},
 				},
@@ -33,10 +33,10 @@ func TestTargets_IsUpdated(t *testing.T) {
 				&Target{
 					Tags: []*TargetTag{
 						{
-							Updated: false,
+							mode: notMatched,
 						},
 						{
-							Updated: false,
+							mode: notMatched,
 						},
 					},
 				},
@@ -48,6 +48,49 @@ func TestTargets_IsUpdated(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := tt.t.AreUpdated(); got != tt.want {
 				t.Errorf("AreUpdated() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestTarget_Done(t1 *testing.T) {
+	tests := []struct {
+		name string
+		tags []*TargetTag
+		want bool
+	}{
+		{
+			name: "Not Done",
+			tags: []*TargetTag{
+				{
+					mode: notMatched,
+				},
+				{
+					mode: executed,
+				},
+			},
+			want: false,
+		},
+		{
+			name: "Done",
+			tags: []*TargetTag{
+				{
+					mode: notExecuted,
+				},
+				{
+					mode: executed,
+				},
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t1.Run(tt.name, func(t1 *testing.T) {
+			t := &Target{
+				Tags: tt.tags,
+			}
+			if got := t.Done(); got != tt.want {
+				t1.Errorf("Done() = %v, want %v", got, tt.want)
 			}
 		})
 	}
