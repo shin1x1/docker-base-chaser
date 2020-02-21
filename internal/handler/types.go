@@ -19,6 +19,18 @@ type FetchedImage struct {
 // Target Models
 type Targets []*Target
 
+func (t *Targets) AreUpdated() bool {
+	for _, target := range *t {
+		for _, tag := range target.Tags {
+			if tag.IsUpdated() {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 type Target struct {
 	Provider string
 	Image    string
@@ -48,6 +60,7 @@ type TargetTag struct {
 	Version     string
 	LastUpdated *time.Time
 	Fetched     *time.Time
+	Updated     bool
 
 	re   *regexp.Regexp
 	cons *semver.Constraints
@@ -59,6 +72,7 @@ func NewTargetTag(pattern, version, resolved string, lastUpdated *time.Time) *Ta
 		Pattern:     pattern,
 		Version:     version,
 		LastUpdated: lastUpdated,
+		Updated:     false,
 	}
 	t.re = regexp.MustCompile(t.Pattern)
 
@@ -89,8 +103,13 @@ func (t *TargetTag) Update(image *provider.Image) {
 	t.Tag = image.Tag
 	t.LastUpdated = &image.LastUpdated
 	t.Fetched = &image.LastUpdated
+	t.Updated = true
 }
 
 func (t *TargetTag) IsFetched() bool {
 	return t.Fetched != nil
+}
+
+func (t *TargetTag) IsUpdated() bool {
+	return t.Updated
 }

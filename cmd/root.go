@@ -44,8 +44,8 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 
-		// If dryRun is enabled, will not update lock file.
-		if dryRun {
+		// If dryRun is enabled or the targets were not updated, will not update the lock file.
+		if dryRun || !targets.AreUpdated() {
 			return nil
 		}
 
