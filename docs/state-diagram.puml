@@ -1,0 +1,12 @@
+@startuml
+
+[*] --> NotMatched
+NotMatched --> NotMatched : Not match
+NotMatched --> Matched : Match
+Matched --> NotExecuted : The image was not Updated
+NotExecuted --> [*]
+Matched --> Updated : The image was updated
+Updated --> Executed : The command was executed
+Executed --> [*]
+
+@enduml
