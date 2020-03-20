@@ -84,12 +84,19 @@ func (r *RootHandler) fetchLoop(provider provider.Provider, target *Target) erro
 func (r *RootHandler) updateTags(images []*provider.Image, target *Target) error {
 	for _, tag := range target.Tags {
 		if !tag.CanMatch() {
-			continue;
+			continue
 		}
 
 		for _, img := range images {
 			// pattern にマッチすること
 			if !tag.MatchPattern(img.Tag) {
+				continue
+			}
+
+			if tag.Os != "" && tag.Os != img.Os {
+				continue
+			}
+			if tag.Architecture != "" && tag.Architecture != img.Architecture {
 				continue
 			}
 

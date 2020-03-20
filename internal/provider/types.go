@@ -10,11 +10,13 @@ type Provider interface {
 }
 
 type Image struct {
-	Image       string
-	Tag         string
-	LastUpdated time.Time
+	Image        string
+	Tag          string
+	Os           string
+	Architecture string
+	LastUpdated  time.Time
 }
 
-func NewImage(image string, tag string, lastUpdated time.Time) *Image {
-	return &Image{Image: image, Tag: tag, LastUpdated: lastUpdated}
+func NewImage(image string, tag string, os string, architecture string, lastUpdated time.Time) *Image {
+	return &Image{Image: image, Tag: tag, Os: os, Architecture: architecture, LastUpdated: lastUpdated}
 }

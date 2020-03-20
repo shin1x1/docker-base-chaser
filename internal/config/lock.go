@@ -58,6 +58,8 @@ func NewLockWithTargets(targets *handler.Targets, now *time.Time) *Lock {
 				Pattern:       tag.Pattern,
 				Version:       tag.Version,
 				Resolved:      tag.Tag,
+				Os:            tag.Os,
+				Architecture:  tag.Architecture,
 				LastUpdatedAt: tag.LastUpdated,
 			}
 
@@ -88,7 +90,7 @@ func (l *Lock) CreateTargets() *handler.Targets {
 		}
 
 		for _, lTag := range lImage.Base.Tags {
-			tag := handler.NewTargetTag(lTag.Pattern, lTag.Version, lTag.Resolved, lTag.LastUpdatedAt)
+			tag := handler.NewTargetTag(lTag.Pattern, lTag.Version, lTag.Resolved, lTag.Os, lTag.Architecture, lTag.LastUpdatedAt)
 			t.Tags = append(t.Tags, tag)
 		}
 

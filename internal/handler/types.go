@@ -55,11 +55,13 @@ type Template struct {
 }
 
 type TargetTag struct {
-	Tag         string
-	Pattern     string
-	Version     string
-	LastUpdated *time.Time
-	mode        TargetTagMode
+	Tag          string
+	Pattern      string
+	Version      string
+	Os           string
+	Architecture string
+	LastUpdated  *time.Time
+	mode         TargetTagMode
 
 	re   *regexp.Regexp
 	cons *semver.Constraints
@@ -75,13 +77,15 @@ const (
 	notExecuted
 )
 
-func NewTargetTag(pattern, version, resolved string, lastUpdated *time.Time) *TargetTag {
+func NewTargetTag(pattern, version, resolved, os, architecture string, lastUpdated *time.Time) *TargetTag {
 	t := TargetTag{
-		Tag:         resolved,
-		Pattern:     pattern,
-		Version:     version,
-		LastUpdated: lastUpdated,
-		mode:        notMatched,
+		Tag:          resolved,
+		Pattern:      pattern,
+		Version:      version,
+		Os:           os,
+		Architecture: architecture,
+		LastUpdated:  lastUpdated,
+		mode:         notMatched,
 	}
 	t.re = regexp.MustCompile(t.Pattern)
 

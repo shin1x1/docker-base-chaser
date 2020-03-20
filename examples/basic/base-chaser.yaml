@@ -1,3 +1,8 @@
+aliases:
+  tag: &tagBase
+    os: "linux"
+    architecture: "amd64"
+
 images:
   - template:
       src: Dockerfile.tpl
@@ -8,17 +13,24 @@ images:
       provider: dockerhub
       image: library/php
       tags:
-        - pattern: "^7.4.[0-9]+\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7.4.[0-9]+\\-cli\\-buster$"
           version: ^7.4.0
-        - pattern: "^7.4\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7.4\\-cli\\-buster$"
           version: 7.4
-        - pattern: "^7.3.[0-9]+\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7.3.[0-9]+\\-cli\\-buster$"
           version: ^7.3.0
-        - pattern: "^7.3\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7.3\\-cli\\-buster$"
           version: 7.3
-        - pattern: "^7.2.[0-9]+\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7.2.[0-9]+\\-cli\\-buster$"
           version: ^7.2.0
-        - pattern: "^7.2\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7.2\\-cli\\-buster$"
           version: 7.2
-        - pattern: "^7\\-cli\\-buster$"
+        - <<: *tagBase
+          pattern: "^7\\-cli\\-buster$"
           version: 7
