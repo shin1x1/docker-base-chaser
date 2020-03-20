@@ -27,5 +27,7 @@ type Tag struct {
 	Pattern       string     `yaml:"pattern"`
 	Version       string     `yaml:"version"`
 	Resolved      string     `yaml:"resolved"`
+	Os            string     `yaml:"os"`
+	Architecture  string     `yaml:"architecture"`
 	LastUpdatedAt *time.Time `yaml:"last_updated_at"`
 }

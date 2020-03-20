@@ -37,7 +37,7 @@ func (c Config) CreateTargets(conf *Config) *handler.Targets {
 		}
 
 		for _, cTag := range cImage.Base.Tags {
-			tag := handler.NewTargetTag(cTag.Pattern, cTag.Version, "", nil)
+			tag := handler.NewTargetTag(cTag.Pattern, cTag.Version, "", cTag.Os, cTag.Architecture, nil)
 			t.Tags = append(t.Tags, tag)
 		}
 

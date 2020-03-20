@@ -13,34 +13,56 @@ func TestRootHandler_updateTags(t *testing.T) {
 
 	images := []*provider.Image{
 		{
-			Image:       "php",
-			Tag:         "7.4.2",
-			LastUpdated: now,
+			Image:        "php",
+			Tag:          "7.4.3",
+			Os:           "linux",
+			Architecture: "arm", // not match arch
+			LastUpdated:  now,
 		},
 		{
-			Image:       "php",
-			Tag:         "7.3.1",
-			LastUpdated: now,
+			Image:        "php",
+			Tag:          "7.4.3",
+			Os:           "win", // not match os
+			Architecture: "amd64",
+			LastUpdated:  now,
 		},
 		{
-			Image:       "php",
-			Tag:         "7.4",
-			LastUpdated: now,
+			Image:        "php",
+			Tag:          "7.4.2",
+			Os:           "linux",
+			Architecture: "amd64",
+			LastUpdated:  now,
 		},
 		{
-			Image:       "php",
-			Tag:         "7.3",
-			LastUpdated: now,
+			Image:        "php",
+			Tag:          "7.3.1",
+			Os:           "linux",
+			Architecture: "amd64",
+			LastUpdated:  now,
+		},
+		{
+			Image:        "php",
+			Tag:          "7.4",
+			Os:           "linux",
+			Architecture: "amd64",
+			LastUpdated:  now,
+		},
+		{
+			Image:        "php",
+			Tag:          "7.3",
+			Os:           "linux",
+			Architecture: "amd64",
+			LastUpdated:  now,
 		},
 	}
 	target := &Target{
 		Image: "php",
 		Tags: []*TargetTag{
-			NewTargetTag("^7.3$", "7.3", "7.3", &now),
-			NewTargetTag("^7.3.[0-9]+$", "^7.3.0", "7.3.0", &past),
-			NewTargetTag("^7.4$", "7.4", "7.4", &past),
-			NewTargetTag("^7.4.[0-9]+$", "^7.4.0", "", nil),
-			NewTargetTag("^7.5.[0-9]+$", "^7.5.0", "", nil),
+			NewTargetTag("^7.3$", "7.3", "7.3", "linux", "amd64", &now),
+			NewTargetTag("^7.3.[0-9]+$", "^7.3.0", "7.3.0", "linux", "amd64", &past),
+			NewTargetTag("^7.4$", "7.4", "7.4", "linux", "amd64", &past),
+			NewTargetTag("^7.4.[0-9]+$", "^7.4.0", "", "linux", "amd64", nil),
+			NewTargetTag("^7.5.[0-9]+$", "^7.5.0", "", "linux", "amd64", nil),
 		},
 	}
 

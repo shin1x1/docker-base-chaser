@@ -18,7 +18,13 @@ type Response struct {
 
 type result struct {
 	Name        string    `json:"name"`
+	Images      []image   `json:"images"`
 	LastUpdated time.Time `json:"last_updated"`
+}
+
+type image struct {
+	Architecture string `json:"architecture"`
+	Os           string `json:"os"`
 }
 
 type DockerHub struct {
@@ -79,10 +85,16 @@ func (p *DockerHub) readImages() (*Response, error) {
 
 func (p *DockerHub) parse(resp *Response) ([]*Image, error) {
 	images := make([]*Image, 0)
-	for _, i := range resp.Results {
-		img := NewImage("php", i.Name, i.LastUpdated)
+	for _, r := range resp.Results {
+		name := r.Name
+		lastUpdated := r.LastUpdated
 
-		images = append(images, img)
+		for _, i := range r.Images {
+			img := NewImage(p.name, name, i.Os, i.Architecture, lastUpdated)
+
+			images = append(images, img)
+
+		}
 	}
 
 	return images, nil
