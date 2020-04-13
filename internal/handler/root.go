@@ -50,12 +50,12 @@ func (r *RootHandler) fetchLoop(provider provider.Provider, target *Target) erro
 		}
 
 		// テンプレート置換
-		if err := template.ExecFile(target.Template.Source, target.Template.Destination, tag.Tag); err != nil {
+		if err := template.ExecFile(target.Template.Source, target.Template.Destination, tag.Tag, tag.Version); err != nil {
 			return err
 		}
 
 		// コマンド実行
-		cmdText, err := template.Exec(target.Command, tag.Tag, target.Template.Destination)
+		cmdText, err := template.ExecString(target.Command, tag.Tag, tag.Version, target.Template.Destination)
 		if err != nil {
 			return err
 		}
