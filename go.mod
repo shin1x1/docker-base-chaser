@@ -1,10 +1,9 @@
 module github.com/shin1x1/docker-base-chaser
 
-go 1.13
+go 1.16
 
 require (
-	github.com/Masterminds/semver/v3 v3.0.3
-	github.com/heroku/docker-registry-client v0.0.0-20190909225348-afc9e1acc3d5
-	github.com/spf13/cobra v0.0.5
-	gopkg.in/yaml.v2 v2.2.2
+	github.com/Masterminds/semver/v3 v3.1.1
+	github.com/spf13/cobra v1.1.3
+	gopkg.in/yaml.v2 v2.4.0
 )
