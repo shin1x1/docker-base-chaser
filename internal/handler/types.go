@@ -31,6 +31,33 @@ func (t *Targets) AreUpdated() bool {
 	return false
 }
 
+// Merge create new targets.
+// New targets is based on ts, and override the tag that ts1 has it.
+func (ts Targets) Merge(ts1 *Targets) *Targets {
+	targets := Targets{}
+
+	for _, t := range ts {
+		for _, t1 := range *ts1 {
+			if t.Image != t1.Image {
+				continue
+			}
+
+			for k, tg := range t.Tags {
+				for _, tg1 := range t1.Tags {
+					if tg.Pattern == tg1.Pattern {
+						t.Tags[k] = tg1
+						break
+					}
+				}
+			}
+		}
+
+		targets = append(targets, t)
+	}
+
+	return &targets
+}
+
 type Target struct {
 	Provider string
 	Image    string
