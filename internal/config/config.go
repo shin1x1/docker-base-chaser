@@ -53,10 +53,8 @@ func (c Config) LoadTargets() *handler.Targets {
 	targets := c.loadTargets()
 
 	l, err := loadLock(createLockPath(c.filePath))
-	if err != nil {
-		if l != nil {
-			targets = targets.Merge(l.createTargets())
-		}
+	if err == nil {
+		targets = targets.Merge(l.createTargets())
 	}
 
 	return targets
