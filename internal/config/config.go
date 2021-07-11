@@ -18,13 +18,15 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
+	config.filePath = path
+
 	return &config, nil
 }
 
-func (c Config) CreateTargets(conf *Config) *handler.Targets {
+func (c Config) loadTargets() *handler.Targets {
 	targets := handler.Targets{}
 
-	for _, cImage := range conf.Images {
+	for _, cImage := range c.Images {
 		t := handler.Target{
 			Provider: cImage.Base.Provider,
 			Image:    cImage.Base.Image,
@@ -45,4 +47,17 @@ func (c Config) CreateTargets(conf *Config) *handler.Targets {
 	}
 
 	return &targets
+}
+
+func (c Config) LoadTargets() *handler.Targets {
+	targets := c.loadTargets()
+
+	l, err := loadLock(createLockPath(c.filePath))
+	if err != nil {
+		if l != nil {
+			targets = targets.Merge(l.createTargets())
+		}
+	}
+
+	return targets
 }

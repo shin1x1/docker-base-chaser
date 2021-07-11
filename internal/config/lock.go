@@ -14,11 +14,11 @@ type Lock struct {
 	Images        []Image    `yaml:"images"`
 }
 
-func CreateLockPath(path string) string {
+func createLockPath(path string) string {
 	return strings.Replace(path, ".yaml", ".lock", 1)
 }
 
-func LoadLock(path string) (*Lock, error) {
+func loadLock(path string) (*Lock, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func NewLockWithTargets(targets *handler.Targets, now *time.Time) *Lock {
 	return &l
 }
 
-func (l *Lock) CreateTargets() *handler.Targets {
+func (l *Lock) createTargets() *handler.Targets {
 	targets := handler.Targets{}
 
 	for _, lImage := range l.Images {

@@ -26,18 +26,12 @@ var rootCmd = &cobra.Command{
 	Use:   fmt.Sprintf("%s [command] [command args]", CommandName),
 	Short: "",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		var targets *handler.Targets
-		l, err := config.LoadLock(config.CreateLockPath(configFilePath))
-		if err == nil {
-			targets = l.CreateTargets()
-		} else {
-			c, err := config.LoadConfig(configFilePath)
-			if err != nil {
-				return err
-			}
-
-			targets = c.CreateTargets(c)
+		c, err := config.LoadConfig(configFilePath)
+		if err != nil {
+			return err
 		}
+
+		targets := c.LoadTargets()
 
 		h := handler.NewRootHandler(dryRun)
 		if err := h.Exec(targets); err != nil {

@@ -3,7 +3,8 @@ package config
 import "time"
 
 type Config struct {
-	Images []Image `yaml:"images"`
+	filePath string
+	Images   []Image `yaml:"images"`
 }
 
 type Image struct {
