@@ -1,0 +1,21 @@
+aliases:
+  tag: &tagBase
+    os: "linux"
+    architecture: "amd64"
+
+images:
+  - template:
+      src: Dockerfile.tpl
+      dest: Dockerfile
+    command: |
+      echo {{.Tag}}
+    base:
+      provider: dockerhub
+      image: library/php
+      tags:
+        - <<: *tagBase
+          pattern: "^7\\-cli\\-buster$"
+          version: 7
+        - <<: *tagBase
+          pattern: "^8\\-cli\\-buster$"
+          version: 8
