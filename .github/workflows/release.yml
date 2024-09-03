@@ -87,7 +87,7 @@ jobs:
           GOOS=${goos} GOARCH=${goarch} go build -v -o dist/docker-base-chaser .
           zip -j -r release dist
       - name: Download upload_url from artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: release_url
       - name: Get release_url
