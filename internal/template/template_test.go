@@ -8,13 +8,13 @@ import (
 func TestTemplate_Exec(t *testing.T) {
 	tmpl := `
 Tag: {{.Tag}}
-{{- if (matchVersion "^7.4" .Tag) }}
+{{- if (matchSemVer "^7.4" .Tag) }}
 ^7.4
 {{- else }}
 other
 {{- end }}
 
-{{- if or (matchVersion "^7.4" .Tag) (eq "7" .Version) }}
+{{- if or (matchSemVer "^7.4" .Tag) (eq "7" .Version) }}
 ^7.4 or 7
 {{- else }}
 other
