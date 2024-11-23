@@ -48,11 +48,11 @@ func Exec(writer io.Writer, tmpl, tag, version, dest string) error {
 
 func funcMap() template.FuncMap {
 	return template.FuncMap{
-		"matchVersion": matchVersion,
+		"matchSemVer": matchSemVer,
 	}
 }
 
-func matchVersion(constraint, version string) (bool, error) {
+func matchSemVer(constraint, version string) (bool, error) {
 	c, err := semver.NewConstraint(constraint)
 	if err != nil {
 		return false, err
