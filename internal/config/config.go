@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 
 	"github.com/shin1x1/docker-base-chaser/internal/handler"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func LoadConfig(path string) (*Config, error) {

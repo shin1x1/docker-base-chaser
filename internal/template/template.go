@@ -2,7 +2,7 @@ package template
 
 import (
 	"bytes"
-	"github.com/Masterminds/semver/v3"
+	"github.com/Masterminds/semver"
 	"io"
 	"io/ioutil"
 	"os"
